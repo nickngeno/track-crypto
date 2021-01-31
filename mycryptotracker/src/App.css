@@ -1,0 +1,33 @@
+html{
+  font-family: 'Montserrat', sans-serif;
+}
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app{
+  width: 100%;
+  padding: 1rem;
+}
+header{
+  /* margin-top: 1rem; */
+  padding: 1rem;
+  background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Bebas Neue', cursive;
+  background: linear-gradient(to right, #f5cedd, #ff6b08, #ad6dad, #eedd44); 
+  -webkit-text-fill-color: transparent; 
+  -webkit-background-clip: text; 
+  background-clip: text;
+}
+
+.searchbar{
+  margin-top: 2rem;
+}
