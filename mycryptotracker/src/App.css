@@ -9,7 +9,7 @@ body{
 
 .app{
   width: 100%;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 header{
   /* margin-top: 1rem; */
@@ -17,7 +17,7 @@ header{
   background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
 }
 
-.header{
+header .header{
   display: flex;
   justify-content: space-between;
   align-items: center;
