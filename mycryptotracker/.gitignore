@@ -2,7 +2,7 @@
 node_modules
 
 #ignore build
-build
+/build
 
 #ignore file related to api
 .env
