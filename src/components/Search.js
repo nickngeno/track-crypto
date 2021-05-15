@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Spinner } from "react-bootstrap";
 
 export default function Search() {
-  let [crypto, setCrypto] = useState([]);
+  const [crypto, setCrypto] = useState([]);
+  const [filtervalue, setFiltervalue] = useState(crypto);
   const [input, setInput] = useState("");
-
-  console.log("input value:" + input);
-  console.log(crypto);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+  console.log(input)
+  console.log(isSearching)
 
   useEffect(() => {
     fetch(
@@ -15,23 +18,40 @@ export default function Search() {
       .then((response) => response.json())
       .then((data) => {
         setCrypto(data);
+        setIsLoading(false);
       });
-  }, [input]);
+  }, []);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    searchFilter();
+  const handleChange = (e) => {
+    const val = e.target.value
+    setInput(val);
+    setIsSearching(true);
+    searchInput(input);
+    checkIfsearching(input)
+  };
+
+  const checkIfsearching =(input) =>{
+    if (input.trim().length === 0){
+      setIsSearching(false)
+    }
   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    searchInput();
+  };
 
-  function searchFilter() {
-    const myfilter = crypto.filter((item) => item.name.toLowerCase() === input);
-
-    setCrypto(myfilter);
+  function searchInput() {
+    const myfilter = crypto.filter((item) =>
+      item.name.toLowerCase().includes(input.toLowerCase())
+    );
+    setFiltervalue(myfilter);
+    // console.log(myfilter)
+    // console.log(filtervalue);
   }
 
   return (
     <div className="container">
-      <div className="searchbar">
+      <div className="row searchbar">
         <nav className="navbar navbar-light bg-light">
           <div className="container-fluid">
             <form className="d-flex">
@@ -40,60 +60,66 @@ export default function Search() {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
+                required="required"
+                onChange={handleChange}
               />
-              <button
+              {input ? (<button
                 className="btn btn-outline-success"
                 type="submit"
                 onClick={handleSubmit}
               >
                 Search
-              </button>
+              </button>) : (<button
+                className="btn btn-outline-success"
+                type="submit"
+                onClick={handleSubmit}
+                disabled
+              >
+                Search
+              </button>) }
             </form>
           </div>
         </nav>
       </div>
-    
-        <div className="row">
-          <div
-            className="resultstable"
-            // style={{
-            //   marginTop: "2em",
-            //   backgroundColor: "khaki",
-            //   borderRadius: 5,
-              
-            // }}
-          >
-            <table className="table table-dark table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Symbol</th>
-                  <th scope="col">Current_price</th>
-                  <th scope="col">High_24h</th>
-                  <th scope="col">Low_24h</th>
-                  <th scope="col">Net_PriceChange</th>
-                </tr>
-              </thead>
-              {crypto.map((item, index) => (
-                <tbody>
-                  <tr>
-                    <th scope="row">{index + 1}</th>
-                    <td>{item.name}</td>
-                    <td>{item.symbol}</td>
-                    <td>{item.current_price}</td>
-                    <td>{item.high_24h}</td>
-                    <td>{item.low_24h}</td>
-                    <td>{item.price_change_24h}</td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
-          </div>
+      {isLoading && <Spinner animation="border" />}
+      <div className="row">
+        <div className="col resultstable">
+          <table className="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Symbol</th>
+                <th scope="col">Current_price</th>
+                <th scope="col">Net_PriceChange_24h</th>
+              </tr>
+            </thead>
+            {isSearching
+              ? filtervalue.map((item,index) => (
+                  <tbody>
+                    <tr key={item.id} >
+                      <th scope="row">{index + 1}</th>
+                      <td>{item.name}</td>
+                      <td>{item.symbol}</td>
+                      <td>{item.current_price}</td>
+                      <td>{item.price_change_24h}</td>
+                    </tr>
+                  </tbody>
+                ))
+              : crypto.map((item, index) => (
+                  <tbody>
+                    <tr key={item.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{item.name}</td>
+                      <td>{item.symbol}</td>
+                      <td>{item.current_price}</td>
+                      <td>{item.price_change_24h}</td>
+                    </tr>
+                  </tbody>
+                ))}
+          </table>
         </div>
+      </div>
     </div>
   );
 }

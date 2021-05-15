@@ -9,7 +9,6 @@ body{
 
 .app{
   width: 100%;
-  /* padding: 1rem; */
 }
 header{
   /* margin-top: 1rem; */
@@ -30,4 +29,10 @@ header .header{
 
 .searchbar{
   margin-top: 2rem;
+  
+}
+@media screen and (max-width: 600px){
+  .header h1{
+    font-size: 1.5rem;
+  }
 }
