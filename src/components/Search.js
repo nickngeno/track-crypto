@@ -4,12 +4,11 @@ import { Spinner } from "react-bootstrap";
 
 export default function Search() {
   const [crypto, setCrypto] = useState([]);
-  const [filtervalue, setFiltervalue] = useState(crypto);
+  const [searchresult, setSearchresult] = useState(crypto);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isSearching, setIsSearching] = useState(false);
-  console.log(input)
-  console.log(isSearching)
+  const [isSearching, setIsSearching] = useState(true);
+  // console.log(input)
 
   useEffect(() => {
     fetch(
@@ -21,6 +20,11 @@ export default function Search() {
         setIsLoading(false);
       });
   }, []);
+
+  useEffect(() =>{
+    searchInput()
+
+  })
 
   const handleChange = (e) => {
     const val = e.target.value
@@ -40,13 +44,12 @@ export default function Search() {
     searchInput();
   };
 
-  function searchInput() {
+
+  const searchInput = () => {
     const myfilter = crypto.filter((item) =>
       item.name.toLowerCase().includes(input.toLowerCase())
     );
-    setFiltervalue(myfilter);
-    // console.log(myfilter)
-    // console.log(filtervalue);
+    setSearchresult(myfilter);
   }
 
   return (
@@ -60,17 +63,16 @@ export default function Search() {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                required="required"
                 onChange={handleChange}
               />
               {input ? (<button
-                className="btn btn-outline-success"
+                className="btn btn-primary"
                 type="submit"
                 onClick={handleSubmit}
               >
                 Search
               </button>) : (<button
-                className="btn btn-outline-success"
+                className="btn btn-primary"
                 type="submit"
                 onClick={handleSubmit}
                 disabled
@@ -95,7 +97,7 @@ export default function Search() {
               </tr>
             </thead>
             {isSearching
-              ? filtervalue.map((item,index) => (
+              ? searchresult.map((item,index) => (
                   <tbody>
                     <tr key={item.id} >
                       <th scope="row">{index + 1}</th>
@@ -117,7 +119,9 @@ export default function Search() {
                     </tr>
                   </tbody>
                 ))}
+                
           </table>
+          {(isSearching && searchresult.length ===0) && (<p style={{textAlign: "center",fontStyle:"italic"}}>No match found!</p>)}
         </div>
       </div>
     </div>
