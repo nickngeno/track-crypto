@@ -5,18 +5,17 @@ body{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
 
-.app{
-  width: 100%;
 }
 header{
-  /* margin-top: 1rem; */
+  width: 100%;
   padding: 1rem;
   background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);
-}
+  position: fixed;
+  z-index: 99;
 
-header .header{
+}
+.header{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,15 +23,15 @@ header .header{
   background: linear-gradient(to right, #f5cedd, #ff6b08, #ad6dad, #eedd44); 
   -webkit-text-fill-color: transparent; 
   -webkit-background-clip: text; 
-  background-clip: text;
+  background-clip: text; 
+}
+.content-div{
+  padding-top: 100px;
 }
 
-.searchbar{
-  margin-top: 2rem;
-  
-}
 @media screen and (max-width: 600px){
   .header h1{
     font-size: 1.5rem;
   }
+
 }

@@ -21,108 +21,104 @@ export default function Search() {
       });
   }, []);
 
-  useEffect(() =>{
-    searchInput()
-
-  })
+  useEffect(() => {
+    const searchInput = () => {
+      const myfilter = crypto.filter((item) =>
+        item.name.toLowerCase().includes(input.toLowerCase())
+      );
+      setSearchresult(myfilter);
+    };
+    searchInput();
+  }, [input, crypto]);
 
   const handleChange = (e) => {
-    const val = e.target.value
+    const val = e.target.value;
     setInput(val);
     setIsSearching(true);
-    searchInput(input);
-    checkIfsearching(input)
+    checkIfsearching(input);
   };
+  //checking is there is a search going on
 
-  const checkIfsearching =(input) =>{
-    if (input.trim().length === 0){
-      setIsSearching(false)
+  const checkIfsearching = (input) => {
+    if (input.trim().length === 0) {
+      setIsSearching(false);
     }
-  }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    searchInput();
   };
 
-
-  const searchInput = () => {
-    const myfilter = crypto.filter((item) =>
-      item.name.toLowerCase().includes(input.toLowerCase())
-    );
-    setSearchresult(myfilter);
-  }
-
   return (
-    <div className="container">
-      <div className="row searchbar">
-        <nav className="navbar navbar-light bg-light">
-          <div className="container-fluid">
-            <form className="d-flex">
-              <input
-                className="form-control  me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                onChange={handleChange}
-              />
-              {input ? (<button
+    <div className="container content-div">
+      <nav className="navbar navbar-light bg-dark">
+        <div className="container">
+          <form className="d-flex">
+            <input
+              className="form-control  me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              onChange={handleChange}
+            />
+            {input ? (
+              <button
                 className="btn btn-primary"
                 type="submit"
                 onClick={handleSubmit}
               >
                 Search
-              </button>) : (<button
+              </button>
+            ) : (
+              <button
                 className="btn btn-primary"
                 type="submit"
                 onClick={handleSubmit}
                 disabled
               >
                 Search
-              </button>) }
-            </form>
-          </div>
-        </nav>
-      </div>
+              </button>
+            )}
+          </form>
+        </div>
+      </nav>
       {isLoading && <Spinner animation="border" />}
-      <div className="row">
-        <div className="col resultstable">
-          <table className="table table-dark table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Symbol</th>
-                <th scope="col">Current_price</th>
-                <th scope="col">Net_PriceChange_24h</th>
-              </tr>
-            </thead>
+
+      <div className="table-responsive">
+        <table className="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Symbol</th>
+              <th scope="col">Current_price</th>
+              <th scope="col">Net_PriceChange_24h</th>
+            </tr>
+          </thead>
+          <tbody>
             {isSearching
-              ? searchresult.map((item,index) => (
-                  <tbody>
-                    <tr key={item.id} >
-                      <th scope="row">{index + 1}</th>
-                      <td>{item.name}</td>
-                      <td>{item.symbol}</td>
-                      <td>{item.current_price}</td>
-                      <td>{item.price_change_24h}</td>
-                    </tr>
-                  </tbody>
+              ? searchresult.map((item, index) => (
+                  <tr key={item.id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{item.name}</td>
+                    <td>{item.symbol}</td>
+                    <td>{item.current_price}</td>
+                    <td>{item.price_change_24h}</td>
+                  </tr>
                 ))
               : crypto.map((item, index) => (
-                  <tbody>
-                    <tr key={item.id}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{item.name}</td>
-                      <td>{item.symbol}</td>
-                      <td>{item.current_price}</td>
-                      <td>{item.price_change_24h}</td>
-                    </tr>
-                  </tbody>
+                  <tr key={item.id}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{item.name}</td>
+                    <td>{item.symbol}</td>
+                    <td>{item.current_price}</td>
+                    <td>{item.price_change_24h}</td>
+                  </tr>
                 ))}
-                
-          </table>
-          {(isSearching && searchresult.length ===0) && (<p style={{textAlign: "center",fontStyle:"italic"}}>No match found!</p>)}
-        </div>
+          </tbody>
+        </table>
+        {isSearching && searchresult.length === 0 && (
+          <p style={{ textAlign: "center", fontStyle: "italic" }}>Loading...</p>
+        )}
       </div>
     </div>
   );
