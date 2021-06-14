@@ -50,8 +50,7 @@ export default function Search() {
 
   return (
     <div className="container content-div">
-      <nav className="navbar navbar-light bg-dark">
-        <div className="container">
+      <nav className="navbar navbar-light">
           <form className="d-flex">
             <input
               className="form-control  me-2"
@@ -79,10 +78,7 @@ export default function Search() {
               </button>
             )}
           </form>
-        </div>
       </nav>
-      {isLoading && <Spinner animation="border" />}
-
       <div className="table-responsive">
         <table className="table table-dark table-hover">
           <thead>
@@ -101,8 +97,8 @@ export default function Search() {
                     <th scope="row">{index + 1}</th>
                     <td>{item.name}</td>
                     <td>{item.symbol}</td>
-                    <td>{item.current_price}</td>
-                    <td>{item.price_change_24h}</td>
+                    <td>{item.current_price.toFixed(2)}</td>
+                    <td>{item.price_change_24h.toFixed(2)}</td>
                   </tr>
                 ))
               : crypto.map((item, index) => (
@@ -116,9 +112,10 @@ export default function Search() {
                 ))}
           </tbody>
         </table>
-        {isSearching && searchresult.length === 0 && (
-          <p style={{ textAlign: "center", fontStyle: "italic" }}>Loading...</p>
-        )}
+        <div style={{ textAlign: "center", fontStyle: "italic" }}>
+          {isLoading && <Spinner animation="border" variant="primary" />}
+          {isSearching && searchresult.length === 0 && <p>Loading...</p>}
+        </div>
       </div>
     </div>
   );
